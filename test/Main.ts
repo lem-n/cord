@@ -1,11 +1,13 @@
-import CoreClient from '../src/structs/CoreClient.ts';
+import Client from './Client.ts';
 import auth from './auth.ts';
 import Guild from '../src/entities/guild/Guild.ts';
 import Message from '../src/entities/Message.ts';
 import UserStatus from '../src/entities/UserStatus.ts';
 import Activity from '../src/entities/Activity.ts';
 
-const client = new CoreClient({ token: auth.token });
+const client = new Client({ token: auth.token });
+
+client.loadCommands();
 
 client.on('ready', () => {
   console.log('Bot started!');
@@ -34,31 +36,11 @@ client.on('message', (message: Message) => {
   if (message.author.bot || message.author.id === client.me.id) return;
   if (message.content.charAt(0) !== '-') return;
 
-  const cmd = message.content.split(/\s+/g)[0].slice(1);
+  const commandName = message.content.split(/\s+/g)[0].slice(1);
 
-  switch (cmd) {
-    case 'guilds': {
-      console.log(client.guilds);
-      client.rest.sendChannelMessage(message.channelId, `In ${client.guilds.size.toString()} guilds`);
-      break;
-    }
-    case 'users': {
-      console.log(client.users);
-      client.rest
-        .sendChannelMessage(message.channelId, `Serving ${client.users.size.toString()} users`)
-        .then(() => client.rest.reactToMessage(message.channelId, message.id, '😄'));
-      break;
-    }
-    case 'channels': {
-      console.log(client.channels);
-      client.rest.sendChannelMessage(message.channelId, `Part of ${client.channels.size.toString()} channels`);
-      break;
-    }
-    default:
-      client.rest
-        .sendChannelMessage(message.channelId, `Sorry I don't know what that means :(`)
-        .then(() => client.rest.reactToMessage(message.channelId, message.id, '🚫'));
-  }
+  // run command
+  if (client.commands[commandName]) client.commands[commandName].run(client, message);
+  else client.rest.reactToMessage(message.channelId, message.id, '🚫');
 });
 
 client.login();

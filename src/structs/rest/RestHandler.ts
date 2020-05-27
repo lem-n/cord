@@ -2,6 +2,8 @@ import CoreClient from '../CoreClient.ts';
 import { API } from '../../Constants.ts';
 import Request, { HttpMethod } from './Request.ts';
 import Logger from '../Logger.ts';
+import Message from '../../entities/Message.ts';
+import Embed from '../../entities/Embed.ts';
 
 const { Endpoints } = API;
 
@@ -12,16 +14,31 @@ export default class RestHandler {
     this.client = client;
   }
 
-  async sendChannelMessage(channelId: string, messageContent: string) {
+  async sendChannelMessage(channelId: string, messageContent: string, embed?: Embed) {
+    let body;
     const res = await new Request(HttpMethod.POST, Endpoints.Message.Create(channelId), {
       token: this.client.token,
       body: {
         content: messageContent,
         tts: false,
+        embed,
       },
     }).execute();
+
     const json = await res.json();
     Logger.eventDebug('REST', 'Created message :', json.id);
+    return new Message(json);
+  }
+
+  async editMessageText(channelId: string, messageId: string, newContent: string) {
+    const res = await new Request(HttpMethod.PATCH, Endpoints.Message.Edit(channelId, messageId), {
+      token: this.client.token,
+      body: { content: newContent },
+    }).execute();
+
+    const json = await res.json();
+    Logger.eventDebug('REST', 'Edited message :', json.id);
+    return new Message(json);
   }
 
   async reactToMessage(channelId: string, messageId: string, emoji: string): Promise<any> {

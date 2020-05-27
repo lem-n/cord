@@ -1,3 +1,8 @@
+export function objectString(obj: any) {
+  const str = Deno.inspect(obj, { depth: 1 });
+  return str;
+}
+
 export function codeblock(lang: string, content: string) {
   return `\`\`\`${lang}\n${content}\n\`\`\``;
 }
