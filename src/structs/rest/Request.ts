@@ -1,0 +1,49 @@
+import { API, Headers } from '../../Constants.ts';
+
+const { Base } = API;
+
+export enum HttpMethod {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+  DELETE = 'DELETE',
+}
+
+export interface RequestOptions {
+  token?: string;
+  body?: any;
+  headers?: { [k: string]: string };
+}
+
+export default class Request {
+  public method: HttpMethod;
+  public url: string;
+  public options: RequestOptions;
+
+  constructor(method: HttpMethod, url: string, options: RequestOptions = {}) {
+    this.method = method;
+    this.url = `${Base}/${url}`;
+    this.options = options;
+  }
+
+  execute() {
+    let headers: { [k: string]: string } = {};
+    headers['User-Agent'] = Headers['User-Agent'];
+
+    if (this.options.token) headers.Authorization = `Bot ${this.options.token}`;
+    if (this.options.headers) headers = { ...headers, ...this.options.headers };
+
+    let body;
+    if (this.options.body) {
+      body = JSON.stringify(this.options.body);
+      headers['Content-Type'] = 'application/json';
+    }
+
+    return fetch(this.url, {
+      method: this.method,
+      headers,
+      body,
+    });
+  }
+}
