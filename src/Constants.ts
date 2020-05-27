@@ -9,7 +9,9 @@ export const API = {
       React(channelId: string, messageId: string, emoji: string) {
         return `channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me`;
       },
-      // Edit(channelId: string, messageId: string) { return `` },
+      Edit(channelId: string, messageId: string) {
+        return `channels/${channelId}/messages/${messageId}`;
+      },
     },
   },
 };

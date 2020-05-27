@@ -33,7 +33,7 @@ export default class Message {
     this.channelId = data.channel_id;
     this.guildId = data.guild_id;
     this.author = new User(data.author);
-    this.member = new PartialMember(data.member);
+    this.member = data.member && new PartialMember(data.member);
     this.content = data.content;
     this.timestamp = new Date(data.timestamp);
     this.editedTimestamp = new Date(data.edited_timestamp);

@@ -1,4 +1,4 @@
 run:
-	deno run --allow-net test/Main.ts
+	deno run --allow-net --allow-read test/Main.ts
 
 .PHONY: run
