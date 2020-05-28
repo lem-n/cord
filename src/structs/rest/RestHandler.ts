@@ -29,10 +29,10 @@ export default class RestHandler {
     return new Message(json);
   }
 
-  async editMessageText(channelId: string, messageId: string, newContent: string) {
+  async editMessage(channelId: string, messageId: string, newContent: string, embed?: Embed) {
     const res = await new Request(HttpMethod.PATCH, Endpoints.Message.Edit(channelId, messageId), {
       token: this.client.token,
-      body: { content: newContent },
+      body: { content: newContent, embed },
     }).execute();
 
     const json = await res.json();

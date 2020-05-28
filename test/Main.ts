@@ -24,7 +24,7 @@ client.on('ready', () => {
         }),
         status: 'online',
       });
-      client.socket.updateStatus(status);
+      client.ws.updateStatus(status);
     }
   }, 3000);
 });
@@ -41,7 +41,7 @@ client.on('message', (message: Message) => {
 
   // run command
   if (client.commands[commandName]) client.commands[commandName].run(client, message);
-  else client.rest.reactToMessage(message.channelId, message.id, '🚫');
+  else Message.react(client, message, '🚫');
 });
 
 client.login();

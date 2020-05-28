@@ -31,7 +31,7 @@ export default class Help extends Command {
       })
       .join('\n');
 
-    client.rest.sendChannelMessage(message.channelId, '', {
+    Message.send(client, message.channelId, '', {
       title: 'Help',
       description: helpStr,
     });

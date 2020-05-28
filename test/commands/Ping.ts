@@ -13,9 +13,9 @@ export default class Ping extends Command {
   }
 
   async run(client: Client, message: Message) {
-    client.rest.sendChannelMessage(message.channelId, 'Pinging...').then((msg) => {
+    Message.send(client, message.channelId, 'Pinging...').then((msg) => {
       const timeDiff = Math.abs(message.timestamp.getMilliseconds() - msg.timestamp.getMilliseconds());
-      client.rest.editMessageText(msg.channelId, msg.id, `Ping is \`${timeDiff} ms\``);
+      Message.edit(client, msg, `Ping is \`${timeDiff} ms\``);
     });
   }
 }

@@ -1,5 +1,7 @@
 import User from './User.ts';
 import PartialMember from './guild/PartialMember.ts';
+import CoreClient from '../structs/CoreClient.ts';
+import Embed from './Embed.ts';
 
 export default class Message {
   public id: string;
@@ -54,5 +56,17 @@ export default class Message {
     this.application = data.application;
     this.messageReference = data.message_reference;
     this.flags = data.flags;
+  }
+
+  static send(client: CoreClient, channelId: string, content: string, embed?: Embed) {
+    return client.rest.sendChannelMessage(channelId, content, embed);
+  }
+
+  static edit(client: CoreClient, message: Message, newContent: string, embed?: Embed) {
+    return client.rest.editMessage(message.channelId, message.id, newContent, embed);
+  }
+
+  static react(client: CoreClient, message: Message, emoji: string) {
+    return client.rest.reactToMessage(message.channelId, message.id, emoji);
   }
 }

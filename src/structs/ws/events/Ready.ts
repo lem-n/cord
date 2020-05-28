@@ -8,8 +8,8 @@ export default {
   handle(client: CoreClient, payload: Payload) {
     const data = payload.d;
 
-    client.socket.sessionId = data.session_id;
-    client.socket.identified = true;
+    client.ws.sessionId = data.session_id;
+    client.ws.identified = true;
 
     client.me = new User(data.user);
     client.emit(Events.READY, data);

@@ -18,7 +18,7 @@ export default class CoreClient extends EventEmitter {
   public token: string;
   public me: User;
 
-  public socket: SocketHandler;
+  public ws: SocketHandler;
   public rest: RestHandler;
 
   public users: Map<string, User>;
@@ -36,7 +36,7 @@ export default class CoreClient extends EventEmitter {
     this.token = options.token;
     this.me = new User({});
 
-    this.socket = new SocketHandler(this);
+    this.ws = new SocketHandler(this);
     this.rest = new RestHandler(this);
 
     this.users = new Map();
@@ -45,6 +45,6 @@ export default class CoreClient extends EventEmitter {
   }
 
   async login() {
-    this.socket.connect();
+    this.ws.connect();
   }
 }
