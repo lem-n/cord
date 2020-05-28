@@ -137,6 +137,10 @@ export default class SocketHandler {
     }
   }
 
+  private sendGatewayIntents() {
+    // send what events not to subscribe to
+  }
+
   updateStatus(status: UserStatus) {
     this.socket?.send({
       op: WS.OP.UPDATE_STATUS,

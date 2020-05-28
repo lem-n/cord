@@ -1,9 +1,10 @@
-import * as path from 'https://deno.land/std/path/mod.ts';
 import CoreClient, { ClientOptions } from '../src/structs/CoreClient.ts';
+import logger from '../src/structs/Logger.ts';
 import Command from './Command.ts';
 
 export default class Client extends CoreClient {
   public commands: { [key: string]: Command };
+  public commandHelp?: string;
 
   constructor(options: ClientOptions) {
     super(options);
@@ -16,6 +17,28 @@ export default class Client extends CoreClient {
       const command: Command = new clazz.default();
       this.commands[command.name] = command;
     }
-    console.log('Commands loaded');
+
+    // preformat the command help string
+
+    const groups: { [k: string]: Command[] } = {};
+    for (const [_, cmd] of Object.entries(this.commands)) {
+      if (cmd.category) {
+        if (groups[cmd.category]) groups[cmd.category].push(cmd);
+        else {
+          groups[cmd.category] = [];
+          groups[cmd.category].push(cmd);
+        }
+      }
+    }
+
+    this.commandHelp = Object.keys(groups)
+      .map((groupName) => {
+        const cmds = groups[groupName];
+        const cmdStr = cmds.map((cmd) => `\`${cmd.name}\` - ${cmd.description}`).join('\n');
+        return `__**${groupName.charAt(0).toUpperCase() + groupName.slice(1)} commands**__\n${cmdStr}`;
+      })
+      .join('\n');
+
+    logger.info('Commands loaded');
   }
 }

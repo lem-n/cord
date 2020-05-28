@@ -8,7 +8,7 @@ import Logger from '../src/structs/Logger.ts';
 
 const client = new Client({ token: config.token, logLevel: 'DEBUG' });
 
-client.loadCommands();
+await client.loadCommands();
 
 client.on('ready', () => {
   Logger.info('Bot started!');
