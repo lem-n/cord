@@ -7,7 +7,7 @@ export default class Echo extends Command {
     super({
       name: 'echo',
       description: 'Repeats a message',
-      category: 'utils',
+      category: 'test',
     });
   }
 
