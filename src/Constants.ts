@@ -53,6 +53,15 @@ export const APIEvents = {
   },
   MESSAGE: {
     CREATE: 'MESSAGE_CREATE',
+    UPDATE: 'MESSAGE_UPDATE',
+    DELETED: 'MESSAGE_DELETE',
+    REACTION: {
+      ADDED: 'MESSAGE_REACTION_ADD',
+      REMOVED: 'MESSAGE_REACTION_REMOVE',
+    },
+  },
+  PRESENCE: {
+    UPDATED: 'PRESENCE_UPDATED',
   },
 };
 
@@ -64,5 +73,14 @@ export const Events = {
   },
   MESSAGE: {
     CREATE: 'message',
+    UPDATE: 'messageUpdated',
+    DELETED: 'messageDeleted',
+    REACTION: {
+      ADDED: 'reactionAdded',
+      REMOVED: 'reactionRemoved',
+    },
+  },
+  PRESENCE: {
+    UPDATED: 'presenceUpdated',
   },
 };

@@ -1,16 +1,17 @@
 import Client from './Client.ts';
-import auth from './auth.ts';
+import config from './config.ts';
 import Guild from '../src/entities/guild/Guild.ts';
 import Message from '../src/entities/Message.ts';
 import UserStatus from '../src/entities/UserStatus.ts';
 import Activity from '../src/entities/Activity.ts';
+import Logger from '../src/structs/Logger.ts';
 
-const client = new Client({ token: auth.token });
+const client = new Client({ token: config.token });
 
 client.loadCommands();
 
 client.on('ready', () => {
-  console.log('Bot started!');
+  Logger.info('Bot started!');
 
   setTimeout(() => {
     if (!client.me.presence?.game) {
@@ -29,12 +30,12 @@ client.on('ready', () => {
 });
 
 client.on('guildCreated', (guild: Guild) => {
-  console.log('Guild ->', guild.name);
+  Logger.info('Guild ->', guild.name);
 });
 
 client.on('message', (message: Message) => {
   if (message.author.bot || message.author.id === client.me.id) return;
-  if (message.content.charAt(0) !== '-') return;
+  if (message.content.charAt(0) !== config.prefix) return;
 
   const commandName = message.content.split(/\s+/g)[0].slice(1);
 

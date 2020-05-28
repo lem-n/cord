@@ -1,5 +1,7 @@
 import CoreClient from '../../CoreClient.ts';
 import MessageCreated from './MessageCreated.ts';
+import MessageUpdated from './MessageUpdated.ts';
+import MessageDeleted from './MessageDeleted.ts';
 import Ready from './Ready.ts';
 import GuildCreated from './GuildCreated.ts';
 import Resumed from './Resumed.ts';
@@ -19,6 +21,8 @@ export default class EventHandler {
       [Ready.name]: Ready.handle,
       [Resumed.name]: Resumed.handle,
       [MessageCreated.name]: MessageCreated.handle,
+      [MessageUpdated.name]: MessageUpdated.handle,
+      [MessageDeleted.name]: MessageDeleted.handle,
       [GuildCreated.name]: GuildCreated.handle,
     };
   }

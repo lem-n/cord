@@ -15,7 +15,6 @@ export default class RestHandler {
   }
 
   async sendChannelMessage(channelId: string, messageContent: string, embed?: Embed) {
-    let body;
     const res = await new Request(HttpMethod.POST, Endpoints.Message.Create(channelId), {
       token: this.client.token,
       body: {
