@@ -1,20 +1,73 @@
-// import * as log from 'https://deno.land/std/log/mod.ts';
-import { blue, yellow, red, cyan, magenta } from 'https://deno.land/std/fmt/colors.ts';
+import * as log from 'https://deno.land/std/log/mod.ts';
+import { getLevelByName, LevelName } from 'https://deno.land/std/log/levels.ts';
+import { blue, yellow, red, cyan, magenta, reset, white } from 'https://deno.land/std/fmt/colors.ts';
 
-export default {
-  info(msg: string, ...args: any[]) {
-    console.log(`(${cyan('INFO')})`, msg, ...args);
+function formatLogLevel(record: any) {
+  let str;
+  if (record.level === log.LogLevels.ERROR || record.level === log.LogLevels.CRITICAL) {
+    str = `(${red(record.levelName)})`;
+  } else if (record.level === log.LogLevels.WARNING) {
+    str = `(${yellow(record.levelName)})`;
+  } else if (record.level === log.LogLevels.DEBUG) {
+    str = `(${blue(record.levelName)})`;
+  } else {
+    str = `(${cyan(record.levelName)})`;
+  }
+  return white(str);
+}
+
+function formatArgs(args: any[]) {
+  if (args.length > 0) {
+    let str = args.map((arg) => Deno.inspect(arg)).join(' ');
+    return str;
+  }
+  return '';
+}
+
+await log.setup({
+  handlers: {
+    console: new log.handlers.ConsoleHandler('DEBUG', {
+      formatter: (record) => {
+        const loglevel = formatLogLevel(record);
+
+        let msg = '';
+        if (record.level === log.LogLevels.ERROR || record.level === log.LogLevels.CRITICAL)
+          msg = `${loglevel} ${red(record.msg)}`;
+        else msg = `${loglevel} ${reset(record.msg)}`;
+
+        const args = formatArgs(record.args);
+        return `${msg}${args && ` ${args}`}`;
+      },
+    }),
+    events: new log.handlers.ConsoleHandler('DEBUG', {
+      formatter: (record) => {
+        const loglevel = formatLogLevel(record);
+        let msg = `${loglevel} [${magenta(record.args[0] as string)}] ${record.msg}`;
+
+        const args = formatArgs(record.args.slice(1));
+        return `${msg}${args && ` ${args}`}`;
+      },
+    }),
   },
-  debug(msg: string, ...args: any[]) {
-    console.log(`(${blue('DEBUG')})`, msg, ...args);
+  loggers: {
+    default: {
+      level: 'DEBUG',
+      handlers: ['console'],
+    },
+    events: {
+      level: 'DEBUG',
+      handlers: ['events'],
+    },
   },
-  warn(msg: string, ...args: any[]) {
-    console.log(`(${yellow('WARN')})`, msg, ...args);
-  },
-  eventDebug(eventName: string, msg: string, ...args: any[]) {
-    this.debug(`[${magenta(eventName)}]`, msg, ...args);
-  },
-  error(msg: string, error?: any) {
-    console.error(`(${red('ERROR')})`, msg, error!);
-  },
-};
+});
+
+const logger = log.getLogger();
+export const eventLogger = log.getLogger('events');
+
+export function setLogLevel(levelName: LevelName) {
+  const level = getLevelByName(levelName);
+  logger.level = level;
+  eventLogger.level = level;
+}
+
+export default logger;

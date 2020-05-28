@@ -6,7 +6,7 @@ import {
   isWebSocketPongEvent,
   isWebSocketCloseEvent,
 } from 'https://deno.land/std/ws/mod.ts';
-import Logger from '../Logger.ts';
+import logger from '../Logger.ts';
 
 function encode(data: any) {
   if (typeof data === 'object') return JSON.stringify(data);
@@ -47,7 +47,7 @@ export default class Socket extends EventEmitter {
         }
       }
     } catch (err) {
-      Logger.error(err.message, err);
+      logger.error(err.message, err);
       this.emit('error', err);
     }
   }

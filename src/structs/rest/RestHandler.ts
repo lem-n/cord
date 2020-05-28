@@ -1,7 +1,7 @@
 import CoreClient from '../CoreClient.ts';
 import { API } from '../../Constants.ts';
 import Request, { HttpMethod } from './Request.ts';
-import Logger from '../Logger.ts';
+import { eventLogger as logger } from '../Logger.ts';
 import Message from '../../entities/Message.ts';
 import Embed from '../../entities/Embed.ts';
 
@@ -25,7 +25,7 @@ export default class RestHandler {
     }).execute();
 
     const json = await res.json();
-    Logger.eventDebug('REST', 'Created message :', json.id);
+    logger.debug('Created message', 'REST:CREATE_MESSAGE', json.id);
     return new Message(json);
   }
 
@@ -36,7 +36,7 @@ export default class RestHandler {
     }).execute();
 
     const json = await res.json();
-    Logger.eventDebug('REST', 'Edited message :', json.id);
+    logger.debug('Edited message', 'REST:EDIT_MESSAGE', json.id);
     return new Message(json);
   }
 
@@ -44,6 +44,6 @@ export default class RestHandler {
     await new Request(HttpMethod.PUT, Endpoints.Message.React(channelId, messageId, encodeURIComponent(emoji)), {
       token: this.client.token,
     }).execute();
-    Logger.eventDebug('REST', `Reacted with ${emoji} to message`, messageId);
+    logger.debug('Reacted to message', 'REST:CREATE_REACTION', messageId, `with ${emoji}`);
   }
 }

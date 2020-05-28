@@ -2,12 +2,15 @@ import { EventEmitter } from 'https://deno.land/std/node/events.ts';
 import SocketHandler from './ws/SocketHandler.ts';
 import RestHandler from './rest/RestHandler.ts';
 
+import { LevelName } from 'https://deno.land/std/log/levels.ts';
+import { setLogLevel } from './Logger.ts';
+
 import User from '../entities/User.ts';
 import Guild from '../entities/guild/Guild.ts';
 
 export interface ClientOptions {
   token: string;
-  logLevel?: 'info' | 'warn' | 'error' | 'debug';
+  logLevel?: LevelName;
 }
 
 export default class CoreClient extends EventEmitter {
@@ -26,6 +29,10 @@ export default class CoreClient extends EventEmitter {
     super();
 
     this.options = options;
+    this.options.logLevel = options.logLevel || 'INFO';
+
+    setLogLevel(this.options.logLevel);
+
     this.token = options.token;
     this.me = new User({});
 

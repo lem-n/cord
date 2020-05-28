@@ -2,9 +2,9 @@ import Socket from './Socket.ts';
 import { WS, IdentityProps, API } from '../../Constants.ts';
 import CoreClient from '../CoreClient.ts';
 import EventHandler from './events/EventHandler.ts';
-import Logger from '../Logger.ts';
 import UserStatus from '../../entities/UserStatus.ts';
 import Request, { HttpMethod } from '../rest/Request.ts';
+import { eventLogger as logger } from '../Logger.ts';
 
 export default class SocketHandler {
   private client: CoreClient;
@@ -31,13 +31,13 @@ export default class SocketHandler {
 
   initListeners() {
     if (this.socket) {
-      this.socket.on('open', () => console.log('Connected to DAPI websocket'));
+      this.socket.on('open', () => logger.debug('Connected to websocket', 'WS:OPEN'));
       this.socket.on('close', () => {
-        console.log('Closing DAPI websocket connection');
+        logger.debug('Closing websocket connection', 'WS:CLOSE');
         if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
       });
       this.socket.on('message', (payload: any) => this.handle(JSON.parse(payload)));
-      this.socket.on('error', (err: any) => console.error(err));
+      this.socket.on('error', (err: any) => logger.error('Something went wrong', err));
     }
   }
 
@@ -72,20 +72,20 @@ export default class SocketHandler {
 
     switch (payload.op) {
       case WS.OP.DISPATCH: {
-        Logger.eventDebug('WS:DISPATCH', 'Event', payload.t);
+        logger.debug('Event received', 'WS:DISPATCH', payload.t);
         this.sequenceKey = payload.s;
         this.eventHandler.handle(payload.t, payload);
         break;
       }
       case WS.OP.HEARTBEAT: {
-        Logger.eventDebug('WS:HEARTBEAT', 'Heartbeat request, sending heartbeat');
+        logger.debug('Heartbeat request, sending heartbeat', 'WS:HEARTBEAT');
         this.socket.send({
           op: WS.OP.HEARTBEAT,
           d: this.sequenceKey,
         });
       }
       case WS.OP.INVALID_SESSION: {
-        Logger.eventDebug('WS:INVALID_SESSION', 'Attemption to re-identify');
+        logger.debug('Attempting to re-identify', 'WS:INVALID_SESSION');
         this.identified = false;
         setTimeout(() => {
           this.socket?.send({
@@ -99,7 +99,7 @@ export default class SocketHandler {
         break;
       }
       case WS.OP.HELLO: {
-        Logger.eventDebug('WS:HELLO', 'Starting heartbeats');
+        logger.debug('Starting heartbeats', 'WS:HELLO');
         const hbPayload = {
           op: WS.OP.HEARTBEAT,
           d: this.sequenceKey || null,
@@ -107,7 +107,7 @@ export default class SocketHandler {
 
         if (!this.heartbeatInterval) {
           this.heartbeatInterval = setInterval(() => {
-            Logger.eventDebug('HEARTBEAT_INTERVAL', 'Sending heartbeat');
+            logger.debug('Sending heartbeat', 'WS:HEARTBEAT_INTERVAL');
             this.socket?.send(hbPayload);
           }, payload.d.heartbeat_interval);
         }
@@ -115,7 +115,7 @@ export default class SocketHandler {
         this.socket.send(hbPayload);
 
         if (!this.identified) {
-          console.log('HELLO:IDENTIFY', 'identifying bot');
+          logger.debug('Identifying bot', 'WS:HELLO:IDENTIFY');
           this.socket.send({
             op: WS.OP.IDENTIFY,
             d: {
@@ -127,11 +127,11 @@ export default class SocketHandler {
         break;
       }
       case WS.OP.HEARTBEAT_ACK: {
-        Logger.eventDebug('HEARTBEAT_ACK', 'Heartbeat acknowledged');
+        logger.debug('Heartbeat acknowledged', 'WS:HEARTBEAT_ACK');
         break;
       }
       default: {
-        console.log('DEFAULT', payload);
+        logger.debug(payload, 'WS:DEFAULT_HANDLER');
         break;
       }
     }

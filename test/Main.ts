@@ -6,7 +6,7 @@ import UserStatus from '../src/entities/UserStatus.ts';
 import Activity from '../src/entities/Activity.ts';
 import Logger from '../src/structs/Logger.ts';
 
-const client = new Client({ token: config.token });
+const client = new Client({ token: config.token, logLevel: 'DEBUG' });
 
 client.loadCommands();
 
