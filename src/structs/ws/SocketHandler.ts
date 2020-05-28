@@ -72,7 +72,6 @@ export default class SocketHandler {
 
     switch (payload.op) {
       case WS.OP.DISPATCH: {
-        // console.log('DISPATCH', payload.t);
         Logger.eventDebug('WS:DISPATCH', 'Event', payload.t);
         this.sequenceKey = payload.s;
         this.eventHandler.handle(payload.t, payload);
