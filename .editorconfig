@@ -9,3 +9,4 @@ charset = utf-8
 trim_trailing_whitespace = true
 quote_type = single
 max_line_length = 120
+spaces_around_operators = true
