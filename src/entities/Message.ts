@@ -59,7 +59,7 @@ export default class Message {
   }
 
   static send(client: CoreClient, channelId: string, content: string, embed?: Embed) {
-    return client.rest.sendChannelMessage(channelId, content, embed);
+    return client.rest.sendMessage(channelId, content, embed);
   }
 
   static edit(client: CoreClient, message: Message, newContent: string, embed?: Embed) {

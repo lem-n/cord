@@ -13,6 +13,7 @@ export default class Echo extends Command {
 
   async run(client: Client, message: Message) {
     const messageContent = message.content.slice(this.name.length + 1);
-    Message.send(client, message.channelId, messageContent);
+    // Message.send(client, message.channelId, messageContent);
+    client.rest.sendMessage(message.channelId, messageContent);
   }
 }

@@ -1,20 +1,42 @@
+export enum HttpMethod {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+  DELETE = 'DELETE',
+}
+
 export const API = {
   Base: 'https://discord.com/api/v6',
   Endpoints: {
     GatewayBot: 'gateway/bot',
     Message: {
       Create(channelId: string) {
-        return `channels/${channelId}/messages`;
-      },
-      React(channelId: string, messageId: string, emoji: string) {
-        return `channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me`;
+        return {
+          method: HttpMethod.POST,
+          route: 'channels/messages',
+          url: `channels/${channelId}/messages`,
+        };
       },
       Edit(channelId: string, messageId: string) {
-        return `channels/${channelId}/messages/${messageId}`;
+        return {
+          method: HttpMethod.PATCH,
+          route: 'channels/messages',
+          url: `channels/${channelId}/messages/${messageId}`,
+        };
+      },
+      React(channelId: string, messageId: string, emoji: string) {
+        return {
+          method: HttpMethod.PUT,
+          route: 'channel/messages/reactions',
+          url: `channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me`,
+        };
       },
     },
   },
 };
+
+export const MajorParams = ['channel_id', 'guild_id', 'webook_id'];
 
 export const Headers = {
   'User-Agent': 'Cord (https://github.com/lem-n/cord)',

@@ -1,6 +1,7 @@
 import CoreClient from '../CoreClient.ts';
 import { API } from '../../Constants.ts';
-import Request, { HttpMethod } from './Request.ts';
+import Request from './Request.ts';
+import RestLimiter from './RestLimiter.ts';
 import { eventLogger as logger } from '../Logger.ts';
 import Message from '../../entities/Message.ts';
 import Embed from '../../entities/Embed.ts';
@@ -9,41 +10,58 @@ const { Endpoints } = API;
 
 export default class RestHandler {
   private client: CoreClient;
+  private limiter: RestLimiter;
 
   constructor(client: CoreClient) {
     this.client = client;
+    this.limiter = new RestLimiter();
   }
 
-  async sendChannelMessage(channelId: string, messageContent: string, embed?: Embed) {
-    const res = await new Request(HttpMethod.POST, Endpoints.Message.Create(channelId), {
-      token: this.client.token,
-      body: {
-        content: messageContent,
-        tts: false,
-        embed,
-      },
-    }).execute();
+  private request(endpoint: any, body?: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const req = new Request(endpoint.method, endpoint.url, {
+        route: endpoint.route,
+        token: this.client.token,
+        body,
+      });
 
-    const json = await res.json();
-    logger.debug('Created message', 'REST:CREATE_MESSAGE', json.id);
-    return new Message(json);
+      this.limiter
+        .enqueue(req)
+        .then((data) => resolve(data))
+        .catch((err) => reject(err));
+    });
   }
 
-  async editMessage(channelId: string, messageId: string, newContent: string, embed?: Embed) {
-    const res = await new Request(HttpMethod.PATCH, Endpoints.Message.Edit(channelId, messageId), {
-      token: this.client.token,
-      body: { content: newContent, embed },
-    }).execute();
-
-    const json = await res.json();
-    logger.debug('Edited message', 'REST:EDIT_MESSAGE', json.id);
-    return new Message(json);
+  sendMessage(channelId: string, content: string, embed?: Embed): Promise<Message> {
+    return this.request(Endpoints.Message.Create(channelId), {
+      content,
+      embed,
+      tts: false,
+    })
+      .then((data) => {
+        logger.debug('Created message', 'REST:CREATE_MESSAGE', data.id);
+        return new Message(data);
+      })
+      .catch((err) => Promise.reject(err));
   }
 
-  async reactToMessage(channelId: string, messageId: string, emoji: string): Promise<any> {
-    await new Request(HttpMethod.PUT, Endpoints.Message.React(channelId, messageId, encodeURIComponent(emoji)), {
-      token: this.client.token,
-    }).execute();
-    logger.debug('Reacted to message', 'REST:CREATE_REACTION', messageId, `with ${emoji}`);
+  editMessage(channelId: string, messageId: string, newContent: string, embed?: Embed): Promise<Message> {
+    return this.request(Endpoints.Message.Edit(channelId, messageId), {
+      content: newContent,
+      embed,
+    })
+      .then((data) => {
+        logger.debug('Edited message', 'REST:EDIT_MESSAGE', data.id);
+        return new Message(data);
+      })
+      .catch((err) => Promise.reject(err));
+  }
+
+  reactToMessage(channelId: string, messageId: string, emoji: string): Promise<void> {
+    return this.request(Endpoints.Message.React(channelId, messageId, encodeURIComponent(emoji)))
+      .then((data) => {
+        logger.debug('Reacted to message', 'REST:CREATE_REACTION', messageId, `with ${emoji}`);
+      })
+      .catch((err) => Promise.reject(err));
   }
 }

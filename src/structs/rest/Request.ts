@@ -1,17 +1,10 @@
-import { API, Headers } from '../../Constants.ts';
+import { API, Headers, HttpMethod } from '../../Constants.ts';
 
 const { Base } = API;
 
-export enum HttpMethod {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
-}
-
 export interface RequestOptions {
   token?: string;
+  route?: string;
   body?: any;
   headers?: { [k: string]: string };
 }
@@ -19,12 +12,14 @@ export interface RequestOptions {
 export default class Request {
   public method: HttpMethod;
   public url: string;
+  public route: string;
   public options: RequestOptions;
 
   constructor(method: HttpMethod, url: string, options: RequestOptions = {}) {
     this.method = method;
     this.url = `${Base}/${url}`;
     this.options = options;
+    this.route = options.route!;
   }
 
   execute() {

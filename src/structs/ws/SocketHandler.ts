@@ -1,9 +1,9 @@
 import Socket from './Socket.ts';
-import { WS, IdentityProps, API } from '../../Constants.ts';
+import { WS, IdentityProps, API, HttpMethod } from '../../Constants.ts';
 import CoreClient from '../CoreClient.ts';
 import EventHandler from './events/EventHandler.ts';
 import UserStatus from '../../entities/UserStatus.ts';
-import Request, { HttpMethod } from '../rest/Request.ts';
+import Request from '../rest/Request.ts';
 import { eventLogger as logger } from '../Logger.ts';
 
 export default class SocketHandler {
