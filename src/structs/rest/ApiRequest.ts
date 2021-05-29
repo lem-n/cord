@@ -1,18 +1,23 @@
-import { API, Headers, HttpMethod } from "../../Constants.ts";
+import type { HttpMethod } from '../../Constants.ts';
+import { API, Headers } from '../../Constants.ts';
 
 const { Base } = API;
 
 export interface RequestOptions {
   token?: string;
   route?: string;
-  body?: BodyInit | null | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  body?: any;
   headers?: { [k: string]: string };
 }
 
 export class ApiRequest {
   public method: HttpMethod;
+
   public url: string;
+
   public route: string;
+
   public options: RequestOptions;
 
   constructor(method: HttpMethod, url: string, options: RequestOptions = {}) {
@@ -24,7 +29,7 @@ export class ApiRequest {
 
   execute() {
     let headers: { [k: string]: string } = {};
-    headers["User-Agent"] = Headers["User-Agent"];
+    headers['User-Agent'] = Headers['User-Agent'];
 
     if (this.options.token) headers.Authorization = `Bot ${this.options.token}`;
     if (this.options.headers) headers = { ...headers, ...this.options.headers };
@@ -32,7 +37,7 @@ export class ApiRequest {
     let body;
     if (this.options.body) {
       body = JSON.stringify(this.options.body);
-      headers["Content-Type"] = "application/json";
+      headers['Content-Type'] = 'application/json';
     }
 
     return fetch(this.url, {

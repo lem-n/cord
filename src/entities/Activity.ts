@@ -1,17 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export default class Activity {
   public name: string;
+
   public type: number;
+
   public url: string;
+
   public createdAt: Date;
+
   public timestamps: any;
+
   public applicationId: string;
+
   public details: string;
+
   public state: string;
+
   public emoji: any;
+
   public party: any;
+
   public assets: any;
+
   public secrets: any;
+
   public instance: boolean;
+
   public flags: number;
 
   constructor(data: any) {

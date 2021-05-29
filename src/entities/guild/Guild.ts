@@ -1,52 +1,97 @@
-import Member from "./Member.ts";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type Member from './Member.ts';
 
 export default class Guild {
   public id: string;
+
   public name: string;
+
   public icon: string;
+
   public splash: string;
+
   public discoverySplash: string;
+
   public owner: boolean;
+
   public ownerId: string;
+
   public permissions: number;
+
   public region: string;
+
   public afkChannelId: string;
+
   public afkTimeout: number;
+
   public embedEnabled: boolean;
+
   public embedChannelId: string;
+
   public verificationLevel: number;
+
   public defaultMessageNotifications: number;
+
   public explicitContentFilter: number;
+
   public mfaLevel: number;
+
   public applicationId: string;
+
   public widgetEnabled: boolean;
+
   public widgetChannelId: string;
+
   public systemChannelId: string;
+
   public systemChannelFlags: number;
+
   public rulesChannelId: string;
+
   public joinedAt: Date;
+
   public large: boolean;
+
   public unavailable: boolean;
+
   public memberCount: number;
+
   public maxPresences: number;
+
   public maxMembers: number;
+
   public vanityUrlCode: string;
+
   public description: string;
+
   public banner: string;
+
   public premiumTier: number;
+
   public premiumSubscriptionCount: number;
+
   public preferredLocale: string;
+
   public publicUpdatesChannelId: string;
+
   public maxVideoChannelUsers: number;
+
   public approximateMemberCount: number;
+
   public approximatePresenceCount: number;
 
   public voiceStates: any[];
+
   public members: Member[];
+
   public channels: any[];
+
   public presences: any[];
+
   public roles: any[];
+
   public emojis: any[];
+
   public features: any[];
 
   constructor(data: any) {

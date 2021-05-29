@@ -1,7 +1,7 @@
-import { APIEvents, Events } from "../../../Constants.ts";
-import CoreClient from "../../CoreClient.ts";
-import Payload from "../../../interfaces/Payload.ts";
-import Message from "../../../entities/Message.ts";
+import { APIEvents, Events } from '../../../Constants.ts';
+import type CoreClient from '../../CoreClient.ts';
+import type { Payload } from '../../../interfaces/Payload.ts';
+import Message from '../../../entities/Message.ts';
 
 export default {
   name: APIEvents.MESSAGE.CREATE,

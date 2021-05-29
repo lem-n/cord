@@ -1,13 +1,13 @@
-import Command from "../Command.ts";
-import Client from "../Client.ts";
-import Message from "../../src/entities/Message.ts";
+import Command from '../Command.ts';
+import Client from '../Client.ts';
+import Message from '../../src/entities/Message.ts';
 
 export default class Help extends Command {
   constructor() {
     super({
-      name: "help",
-      description: "Shows this menu",
-      category: "utils",
+      name: 'help',
+      description: 'Shows this menu',
+      category: 'utils',
     });
   }
 
@@ -16,8 +16,8 @@ export default class Help extends Command {
     if (args[0]) {
       // TODO: implement
     } else {
-      Message.send(client, message.channelId, "", {
-        title: "Help",
+      Message.send(client, message.channelId, '', {
+        title: 'Help',
         description: client.commandHelp!,
       });
     }

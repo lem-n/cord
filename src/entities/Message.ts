@@ -1,34 +1,55 @@
-import User from "./User.ts";
-import PartialMember from "./guild/PartialMember.ts";
-import CoreClient from "../structs/CoreClient.ts";
-import Embed from "./Embed.ts";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import User from './User.ts';
+import PartialMember from './guild/PartialMember.ts';
+import type CoreClient from '../structs/CoreClient.ts';
+import type Embed from './Embed.ts';
 
 export default class Message {
   public client: CoreClient;
+
   public id: string;
+
   public channelId: string;
+
   public guildId: string;
+
   public author: User;
+
   public member: PartialMember;
+
   public content: string;
+
   public timestamp: Date;
+
   public editedTimestamp: Date;
+
   public tts: boolean;
+
   public mentions: {
     everyone: boolean;
     users: User[];
     roles: any[];
     channels: any[];
   };
+
   public attachments: any[];
+
   public embeds: any[];
+
   public reactions: any[];
+
   public nonce: number | string;
+
   public pinned: boolean;
+
   public type: number;
+
   public activity: any;
+
   public application: any;
+
   public messageReference: any;
+
   public flags: number;
 
   constructor(client: CoreClient, data: any) {

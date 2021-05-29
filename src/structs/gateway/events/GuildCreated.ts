@@ -1,6 +1,6 @@
 import { APIEvents, Events } from '../../../Constants.ts';
-import CoreClient from '../../CoreClient.ts';
-import Payload from '../../../interfaces/Payload.ts';
+import type CoreClient from '../../CoreClient.ts';
+import type { Payload } from '../../../interfaces/Payload.ts';
 import Guild from '../../../entities/guild/Guild.ts';
 
 export default {
@@ -8,10 +8,11 @@ export default {
   handle(client: CoreClient, payload: Payload) {
     const guild = new Guild(payload.d);
 
-    guild.members.forEach(
-      (member) => !client.users.has(member.user.id) && client.users.set(member.user.id, member.user)
-    );
-    guild.channels.forEach((channel) => !client.channels.has(channel.id) && client.channels.set(channel.id, channel));
+    guild.members.forEach((member) => !client.users.has(member.user.id)
+      && client.users.set(member.user.id, member.user));
+
+    guild.channels.forEach((channel) => !client.channels.has(channel.id)
+      && client.channels.set(channel.id, channel));
 
     if (!client.me.presence) {
       const presence = guild.presences.filter((pres) => pres.user.id === client.me.id)[0];

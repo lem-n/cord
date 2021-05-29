@@ -1,14 +1,14 @@
-import Command from "../Command.ts";
-import Client from "../Client.ts";
-import Message from "../../src/entities/Message.ts";
+import Command from '../Command.ts';
+import type Client from '../Client.ts';
+import Message from '../../src/entities/Message.ts';
 
 export default class Ping extends Command {
   constructor() {
     super({
-      name: "ping",
-      description: "Shows bot latency",
-      alias: ["latency"],
-      category: "utils",
+      name: 'ping',
+      description: 'Shows bot latency',
+      alias: ['latency'],
+      category: 'utils',
     });
   }
 
@@ -16,11 +16,10 @@ export default class Ping extends Command {
     const pingMessage = await Message.send(
       client,
       message.channelId,
-      "Pinging...",
+      'Pinging...',
     );
     const timeDiff = Math.abs(
-      message.timestamp.getMilliseconds() -
-        pingMessage.timestamp.getMilliseconds(),
+      message.timestamp.getMilliseconds() - pingMessage.timestamp.getMilliseconds(),
     );
     pingMessage.edit(client, pingMessage, `Ping is \`${timeDiff} ms\``);
   }

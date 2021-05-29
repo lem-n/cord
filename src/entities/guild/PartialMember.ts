@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export default class PartialMember {
   public roles: string[];
+
   public hoistedRole: any;
+
   public joinedAt: Date;
+
   public mute: boolean;
+
   public deaf: boolean;
 
   constructor(data: any) {

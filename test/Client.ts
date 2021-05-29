@@ -4,7 +4,9 @@ import Command from './Command.ts';
 
 export default class Client extends CoreClient {
   public commands: { [key: string]: Command };
+
   public aliases: { [key: string]: string };
+
   public commandHelp?: string;
 
   constructor(options: ClientOptions) {
@@ -16,6 +18,7 @@ export default class Client extends CoreClient {
   async loadCommands() {
     for (const file of Deno.readDirSync('./test/commands')) {
       const clazz = await import(`./commands/${file.name}`);
+      // eslint-disable-next-line new-cap
       const command: Command = new clazz.default();
       this.commands[command.name] = command;
       // map aliases

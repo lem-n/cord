@@ -11,12 +11,12 @@ export function flattenObject(obj: { [i: string]: any }) {
   const toReturn: { [i: string]: any } = {};
 
   for (const i in obj) {
-    if (!obj.hasOwnProperty(i)) continue;
+    if (!(i in obj)) continue;
 
-    if (typeof obj[i] === "object" && obj[i] !== null) {
+    if (typeof obj[i] === 'object' && obj[i] !== null) {
       const flatObject = flattenObject(obj[i]);
       for (const x in flatObject) {
-        if (!flatObject.hasOwnProperty(x)) continue;
+        if (!(x in flatObject)) continue;
 
         toReturn[`${i}.${x}`] = flatObject[x];
       }

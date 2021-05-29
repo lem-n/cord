@@ -1,6 +1,6 @@
 import { APIEvents, Events } from '../../../Constants.ts';
-import CoreClient from '../../CoreClient.ts';
-import Payload from '../../../interfaces/Payload.ts';
+import type CoreClient from '../../CoreClient.ts';
+import type { Payload } from '../../../interfaces/Payload.ts';
 
 export default {
   name: APIEvents.MESSAGE.UPDATE,

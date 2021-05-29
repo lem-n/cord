@@ -1,15 +1,17 @@
-import CoreClient from "../CoreClient.ts";
-import { API, EndpointOptions } from "../../Constants.ts";
-import { ApiRequest } from "./ApiRequest.ts";
-import { RateLimiter } from "./RateLimiter.ts";
-import { eventLogger as logger } from "../Logger.ts";
-import Message from "../../entities/Message.ts";
-import Embed from "../../entities/Embed.ts";
+import type CoreClient from '../CoreClient.ts';
+import type { EndpointOptions } from '../../Constants.ts';
+import { API } from '../../Constants.ts';
+import { ApiRequest } from './ApiRequest.ts';
+import { RateLimiter } from './RateLimiter.ts';
+import { eventLogger as logger } from '../Logger.ts';
+import Message from '../../entities/Message.ts';
+import type Embed from '../../entities/Embed.ts';
 
 const { Endpoints } = API;
 
 export class RequestHandler {
   private client: CoreClient;
+
   private limiter: RateLimiter;
 
   constructor(client: CoreClient) {
@@ -17,7 +19,7 @@ export class RequestHandler {
     this.limiter = new RateLimiter();
   }
 
-  // deno-lint-ignore no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async request(endpoint: EndpointOptions, body?: any): Promise<any> {
     try {
       const req = new ApiRequest(endpoint.method, endpoint.url, {
@@ -26,9 +28,9 @@ export class RequestHandler {
         body,
       });
 
-      logger.debug("Executing request: " + endpoint.route, "REST:REQUEST");
+      logger.debug(`Executing request: ${endpoint.route}`, 'REST:REQUEST');
       const res = await this.limiter.enqueue(req);
-      if (res.headers.get("content-type") === "application/json") {
+      if (res.headers.get('content-type') === 'application/json') {
         const json = await res.json();
         return json;
       }
@@ -36,10 +38,11 @@ export class RequestHandler {
       return text;
     } catch (err) {
       logger.error(
-        "Something went wrong when processing the request",
-        "REST:REQUEST",
+        'Something went wrong when processing the request',
+        'REST:REQUEST',
         err,
       );
+      return Promise.reject(err);
     }
   }
 
@@ -54,10 +57,10 @@ export class RequestHandler {
         embed,
         tts: false,
       });
-      logger.debug("Created message", "REST:CREATE_MESSAGE", data.id);
+      logger.debug('Created message', 'REST:CREATE_MESSAGE', data.id);
       return new Message(this.client, data);
     } catch (err) {
-      return await Promise.reject(err);
+      return Promise.reject(err);
     }
   }
 
@@ -75,10 +78,10 @@ export class RequestHandler {
           embed,
         },
       );
-      logger.debug("Edited message", "REST:EDIT_MESSAGE", data.id);
+      logger.debug('Edited message', 'REST:EDIT_MESSAGE', data.id);
       return new Message(this.client, data);
     } catch (err) {
-      return await Promise.reject(err);
+      return Promise.reject(err);
     }
   }
 
@@ -96,13 +99,14 @@ export class RequestHandler {
         ),
       );
       logger.debug(
-        "Reacted to message",
-        "REST:CREATE_REACTION",
+        'Reacted to message',
+        'REST:CREATE_REACTION',
         messageId,
         `with ${emoji}`,
       );
+      return undefined;
     } catch (err) {
-      return await Promise.reject(err);
+      return Promise.reject(err);
     }
   }
 }

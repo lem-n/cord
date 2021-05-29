@@ -2,8 +2,11 @@ import Activity from './Activity.ts';
 
 export default class UserStatus {
   public since: number | null;
+
   public game: Activity;
+
   public status: 'online' | 'dnd' | 'idle' | 'invisible' | 'offline';
+
   public afk: boolean;
 
   constructor(data: UserStatus) {

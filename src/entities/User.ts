@@ -1,16 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export default class User {
   public id: string;
+
   public username: string;
+
   public discriminator: string;
+
   public avatar: string;
+
   public bot: boolean;
+
   public system: boolean;
+
   public multiFactorAuth: boolean;
+
   public locale: string;
+
   public verified: boolean;
+
   public email: string;
+
   public flags: number;
+
   public premiumType: number;
+
   public publicFlags: number;
 
   public presence?: any;

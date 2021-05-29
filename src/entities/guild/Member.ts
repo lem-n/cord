@@ -1,12 +1,19 @@
-import User from "../User.ts";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import User from '../User.ts';
 
 export default class Member {
   public user: User;
+
   public nick: string;
+
   public roles: string[];
+
   public joinedAt: Date;
+
   public boosterSince: Date;
+
   public deaf: boolean;
+
   public mute: boolean;
 
   constructor(data: any) {

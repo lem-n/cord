@@ -1,17 +1,17 @@
-import Client from "./Client.ts";
-import config from "./config.ts";
-import Guild from "../src/entities/guild/Guild.ts";
-import Message from "../src/entities/Message.ts";
-import UserStatus from "../src/entities/UserStatus.ts";
-import Activity from "../src/entities/Activity.ts";
-import Logger from "../src/structs/Logger.ts";
+import Client from './Client.ts';
+import config from './config.ts';
+import Guild from '../src/entities/guild/Guild.ts';
+import Message from '../src/entities/Message.ts';
+import UserStatus from '../src/entities/UserStatus.ts';
+import Activity from '../src/entities/Activity.ts';
+import Logger from '../src/structs/Logger.ts';
 
-const client = new Client({ token: config.token, logLevel: "DEBUG" });
+const client = new Client({ token: config.token, logLevel: 'DEBUG' });
 
 await client.loadCommands();
 
-client.on("ready", () => {
-  Logger.info("Bot started!");
+client.on('ready', () => {
+  Logger.info('Bot started!');
 
   setTimeout(() => {
     if (!client.me.presence?.game) {
@@ -19,21 +19,21 @@ client.on("ready", () => {
         since: null,
         afk: false,
         game: new Activity({
-          name: "Made with Cord",
+          name: 'Made with Cord',
           type: 0,
         }),
-        status: "online",
+        status: 'online',
       });
       client.gateway.updateStatus(status);
     }
   }, 3000);
 });
 
-client.on("guildCreated", (guild: Guild) => {
-  Logger.info("Guild ->", guild.name);
+client.on('guildCreated', (guild: Guild) => {
+  Logger.info('Guild ->', guild.name);
 });
 
-client.on("message", (message: Message) => {
+client.on('message', (message: Message) => {
   if (message.author.bot || message.author.id === client.me.id) return;
   if (message.content.charAt(0) !== config.prefix) return;
 
@@ -49,7 +49,7 @@ client.on("message", (message: Message) => {
     const resolvedAlias = client.aliases[commandName];
     command = client.commands[resolvedAlias];
   } else {
-    message.react(client, message, "🚫");
+    message.react(client, message, '🚫');
     return;
   }
 
