@@ -1,5 +1,6 @@
-import Request from './Request.ts';
-import { Deferred } from '../../Utils.ts';
+import { ApiRequest } from "./ApiRequest.ts";
+import { Deferred } from "../../Utils.ts";
+import { eventLogger as logger } from "../Logger.ts";
 
 interface RateLimit {
   limit: number;
@@ -9,30 +10,32 @@ interface RateLimit {
   bucket: string;
 }
 
-export default class RestLimiter {
-  private queue: { deferred: Deferred; request: Request }[];
-  private limits: { [key: string]: RateLimit };
+type LimitMap = { [key: string]: RateLimit };
+
+export class RateLimiter {
+  private queue: { deferred: Deferred; request: ApiRequest }[];
+  private limits: LimitMap;
   private throttle: boolean;
-  private timeout: any;
+  private timeoutId: number;
 
   constructor() {
     this.queue = [];
     this.limits = {};
     this.throttle = false;
-    this.timeout = null;
+    this.timeoutId = -1;
   }
 
   private parseLimits(headers: Headers): RateLimit {
     return {
-      reset: Number(headers.get('x-ratelimit-reset')) * 1000 - Date.now() + 250,
-      resetAfter: Number(headers.get('x-ratelimit-reset-after')),
-      remaining: Number(headers.get('x-ratelimit-remaining')),
-      limit: Number(headers.get('x-ratelimit-limit')),
-      bucket: headers.get('x-ratelimit-bucket')!,
+      reset: Number(headers.get("x-ratelimit-reset")) * 1000 - Date.now() + 250,
+      resetAfter: Number(headers.get("x-ratelimit-reset-after")),
+      remaining: Number(headers.get("x-ratelimit-remaining")),
+      limit: Number(headers.get("x-ratelimit-limit")),
+      bucket: headers.get("x-ratelimit-bucket")!,
     };
   }
 
-  enqueue(request: Request): Promise<any> {
+  enqueue(request: ApiRequest): Promise<Response> {
     const deferred = new Deferred();
     this.queue.push({
       request,
@@ -55,11 +58,13 @@ export default class RestLimiter {
         const timeout = this.limits[route].reset;
         this.queue.unshift(item);
         this.throttle = true;
+        logger.debug("Throttling requests", "REST:RATELIMITER");
 
         // wait until the route resets and then call this again
-        this.timeout = setTimeout(() => {
+        this.timeoutId = setTimeout(() => {
           this.throttle = false;
           this.limits[route].remaining = 1;
+          logger.debug("Retrying request", "REST:RATELIMITER");
           this.handle();
         }, timeout);
         return;
@@ -79,23 +84,19 @@ export default class RestLimiter {
         const timeout = json.retry_after || this.limits[route].resetAfter;
         this.throttle = true;
         this.queue.unshift(item);
+        logger.debug("Ratelimit hit, throttling", "REST:RATELIMITER");
 
-        this.timeout = setTimeout(() => {
+        this.timeoutId = setTimeout(() => {
           this.throttle = false;
           this.limits[route].remaining = 1;
+          logger.debug("Retrying request", "REST:RATELIMITER");
           this.handle();
         }, timeout);
       }
 
       const limits = this.parseLimits(res.headers);
       this.limits[route] = limits;
-
-      if (res.headers.get('content-type')?.startsWith('application/json')) {
-        const json = await res.json();
-        item.deferred.resolve(json);
-      } else {
-        item.deferred.resolve();
-      }
+      item.deferred.resolve(res);
     }
   }
 }

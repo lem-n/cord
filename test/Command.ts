@@ -1,5 +1,5 @@
-import CoreClient from '../src/structs/CoreClient.ts';
-import Message from '../src/entities/Message.ts';
+import CoreClient from "../src/structs/CoreClient.ts";
+import Message from "../src/entities/Message.ts";
 
 export interface CommandConfig {
   name: string;
@@ -21,5 +21,6 @@ export default class Command {
     this.alias = config.alias;
   }
 
-  run(client: CoreClient, message: Message) {}
+  // deno-lint-ignore no-unused-vars
+  run(client: CoreClient, message: Message, args: string[]) {}
 }

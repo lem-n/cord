@@ -1,4 +1,4 @@
-import Member from './Member.ts';
+import Member from "./Member.ts";
 
 export default class Guild {
   public id: string;

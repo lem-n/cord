@@ -1,9 +1,10 @@
-import User from './User.ts';
-import PartialMember from './guild/PartialMember.ts';
-import CoreClient from '../structs/CoreClient.ts';
-import Embed from './Embed.ts';
+import User from "./User.ts";
+import PartialMember from "./guild/PartialMember.ts";
+import CoreClient from "../structs/CoreClient.ts";
+import Embed from "./Embed.ts";
 
 export default class Message {
+  public client: CoreClient;
   public id: string;
   public channelId: string;
   public guildId: string;
@@ -30,7 +31,8 @@ export default class Message {
   public messageReference: any;
   public flags: number;
 
-  constructor(data: any) {
+  constructor(client: CoreClient, data: any) {
+    this.client = client;
     this.id = data.id;
     this.channelId = data.channel_id;
     this.guildId = data.guild_id;
@@ -58,15 +60,30 @@ export default class Message {
     this.flags = data.flags;
   }
 
-  static send(client: CoreClient, channelId: string, content: string, embed?: Embed) {
+  static send(
+    client: CoreClient,
+    channelId: string,
+    content: string,
+    embed?: Embed,
+  ) {
     return client.rest.sendMessage(channelId, content, embed);
   }
 
-  static edit(client: CoreClient, message: Message, newContent: string, embed?: Embed) {
-    return client.rest.editMessage(message.channelId, message.id, newContent, embed);
+  edit(
+    client: CoreClient,
+    message: Message,
+    newContent: string,
+    embed?: Embed,
+  ) {
+    return client.rest.editMessage(
+      message.channelId,
+      message.id,
+      newContent,
+      embed,
+    );
   }
 
-  static react(client: CoreClient, message: Message, emoji: string) {
+  react(client: CoreClient, message: Message, emoji: string) {
     return client.rest.reactToMessage(message.channelId, message.id, emoji);
   }
 }

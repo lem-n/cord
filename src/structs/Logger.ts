@@ -1,10 +1,22 @@
-import * as log from 'https://deno.land/std/log/mod.ts';
-import { getLevelByName, LevelName } from 'https://deno.land/std/log/levels.ts';
-import { blue, yellow, red, cyan, magenta, reset, white } from 'https://deno.land/std/fmt/colors.ts';
+import * as log from "https://deno.land/std/log/mod.ts";
+import { getLevelByName, LevelName } from "https://deno.land/std/log/levels.ts";
+import {
+  blue,
+  cyan,
+  magenta,
+  red,
+  reset,
+  white,
+  yellow,
+} from "https://deno.land/std/fmt/colors.ts";
 
+// deno-lint-ignore no-explicit-any
 function formatLogLevel(record: any) {
   let str;
-  if (record.level === log.LogLevels.ERROR || record.level === log.LogLevels.CRITICAL) {
+  if (
+    record.level === log.LogLevels.ERROR ||
+    record.level === log.LogLevels.CRITICAL
+  ) {
     str = `(${red(record.levelName)})`;
   } else if (record.level === log.LogLevels.WARNING) {
     str = `(${yellow(record.levelName)})`;
@@ -16,33 +28,39 @@ function formatLogLevel(record: any) {
   return white(str);
 }
 
+// deno-lint-ignore no-explicit-any
 function formatArgs(args: any[]) {
   if (args.length > 0) {
-    let str = args.map((arg) => Deno.inspect(arg)).join(' ');
+    const str = args.map((arg) => Deno.inspect(arg)).join(" ");
     return str;
   }
-  return '';
+  return "";
 }
 
 await log.setup({
   handlers: {
-    console: new log.handlers.ConsoleHandler('DEBUG', {
+    console: new log.handlers.ConsoleHandler("DEBUG", {
       formatter: (record) => {
         const loglevel = formatLogLevel(record);
 
-        let msg = '';
-        if (record.level === log.LogLevels.ERROR || record.level === log.LogLevels.CRITICAL)
+        let msg = "";
+        if (
+          record.level === log.LogLevels.ERROR ||
+          record.level === log.LogLevels.CRITICAL
+        ) {
           msg = `${loglevel} ${red(record.msg)}`;
-        else msg = `${loglevel} ${reset(record.msg)}`;
+        } else msg = `${loglevel} ${reset(record.msg)}`;
 
         const args = formatArgs(record.args);
         return `${msg}${args && ` ${args}`}`;
       },
     }),
-    events: new log.handlers.ConsoleHandler('DEBUG', {
+    events: new log.handlers.ConsoleHandler("DEBUG", {
       formatter: (record) => {
         const loglevel = formatLogLevel(record);
-        let msg = `${loglevel} [${magenta(record.args[0] as string)}] ${record.msg}`;
+        const msg = `${loglevel} [${
+          magenta(record.args[0] as string)
+        }] ${record.msg}`;
 
         const args = formatArgs(record.args.slice(1));
         return `${msg}${args && ` ${args}`}`;
@@ -51,18 +69,18 @@ await log.setup({
   },
   loggers: {
     default: {
-      level: 'DEBUG',
-      handlers: ['console'],
+      level: "DEBUG",
+      handlers: ["console"],
     },
     events: {
-      level: 'DEBUG',
-      handlers: ['events'],
+      level: "DEBUG",
+      handlers: ["events"],
     },
   },
 });
 
 const logger = log.getLogger();
-export const eventLogger = log.getLogger('events');
+export const eventLogger = log.getLogger("events");
 
 export function setLogLevel(levelName: LevelName) {
   const level = getLevelByName(levelName);

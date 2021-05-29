@@ -1,12 +1,12 @@
-import { EventEmitter } from 'https://deno.land/std/node/events.ts';
-import SocketHandler from './ws/SocketHandler.ts';
-import RestHandler from './rest/RestHandler.ts';
+import { EventEmitter } from "https://deno.land/std/node/events.ts";
+import { Gateway } from "./gateway/Gateway.ts";
+import { RequestHandler } from "./rest/RequestHandler.ts";
 
-import { LevelName } from 'https://deno.land/std/log/levels.ts';
-import { setLogLevel } from './Logger.ts';
+import { LevelName } from "https://deno.land/std/log/levels.ts";
+import { setLogLevel } from "./Logger.ts";
 
-import User from '../entities/User.ts';
-import Guild from '../entities/guild/Guild.ts';
+import User from "../entities/User.ts";
+import Guild from "../entities/guild/Guild.ts";
 
 export interface ClientOptions {
   token: string;
@@ -18,8 +18,8 @@ export default class CoreClient extends EventEmitter {
   public token: string;
   public me: User;
 
-  public ws: SocketHandler;
-  public rest: RestHandler;
+  public gateway: Gateway;
+  public rest: RequestHandler;
 
   public users: Map<string, User>;
   public guilds: Map<string, Guild>;
@@ -29,22 +29,22 @@ export default class CoreClient extends EventEmitter {
     super();
 
     this.options = options;
-    this.options.logLevel = options.logLevel || 'INFO';
+    this.options.logLevel = options.logLevel || "INFO";
 
     setLogLevel(this.options.logLevel);
 
     this.token = options.token;
     this.me = new User({});
 
-    this.ws = new SocketHandler(this);
-    this.rest = new RestHandler(this);
+    this.gateway = new Gateway(this);
+    this.rest = new RequestHandler(this);
 
     this.users = new Map();
     this.guilds = new Map();
     this.channels = new Map();
   }
 
-  async login() {
-    this.ws.connect();
+  login() {
+    return this.gateway.connect();
   }
 }

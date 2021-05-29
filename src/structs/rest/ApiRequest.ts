@@ -1,15 +1,15 @@
-import { API, Headers, HttpMethod } from '../../Constants.ts';
+import { API, Headers, HttpMethod } from "../../Constants.ts";
 
 const { Base } = API;
 
 export interface RequestOptions {
   token?: string;
   route?: string;
-  body?: any;
+  body?: BodyInit | null | undefined;
   headers?: { [k: string]: string };
 }
 
-export default class Request {
+export class ApiRequest {
   public method: HttpMethod;
   public url: string;
   public route: string;
@@ -24,7 +24,7 @@ export default class Request {
 
   execute() {
     let headers: { [k: string]: string } = {};
-    headers['User-Agent'] = Headers['User-Agent'];
+    headers["User-Agent"] = Headers["User-Agent"];
 
     if (this.options.token) headers.Authorization = `Bot ${this.options.token}`;
     if (this.options.headers) headers = { ...headers, ...this.options.headers };
@@ -32,7 +32,7 @@ export default class Request {
     let body;
     if (this.options.body) {
       body = JSON.stringify(this.options.body);
-      headers['Content-Type'] = 'application/json';
+      headers["Content-Type"] = "application/json";
     }
 
     return fetch(this.url, {

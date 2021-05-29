@@ -4,11 +4,13 @@ import Command from './Command.ts';
 
 export default class Client extends CoreClient {
   public commands: { [key: string]: Command };
+  public aliases: { [key: string]: string };
   public commandHelp?: string;
 
   constructor(options: ClientOptions) {
     super(options);
     this.commands = {};
+    this.aliases = {};
   }
 
   async loadCommands() {
@@ -16,6 +18,12 @@ export default class Client extends CoreClient {
       const clazz = await import(`./commands/${file.name}`);
       const command: Command = new clazz.default();
       this.commands[command.name] = command;
+      // map aliases
+      if (command.alias && command.alias.length !== 0) {
+        for (const alias of command.alias) {
+          if (!this.aliases[alias]) this.aliases[alias] = command.name;
+        }
+      }
     }
 
     // preformat the command help string
