@@ -14,7 +14,15 @@ export default class Help extends Command {
   run(client: Client, message: Message, args: string[]) {
     // give command specific information
     if (args[0]) {
-      // TODO: implement
+      const cmd = client.commands[args[0]];
+      if (cmd) {
+        Message.send(client, message.channelId, '', {
+          title: `Command \`${cmd.name}\``,
+          description: cmd.description,
+        });
+      } else {
+        Message.send(client, message.channelId, `No command with name ${args[0]}`);
+      }
     } else {
       Message.send(client, message.channelId, '', {
         title: 'Help',
