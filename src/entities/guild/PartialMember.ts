@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export default class PartialMember {
+export class PartialMember {
   public roles: string[];
 
   public hoistedRole: any;

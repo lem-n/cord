@@ -1,11 +1,10 @@
-import { APIEvents, Events } from '../../../Constants.ts';
-import type CoreClient from '../../CoreClient.ts';
-import type { Payload } from '../../../interfaces/Payload.ts';
-import User from '../../../entities/User.ts';
+import { APIEvents, Events } from '../../../utils/mod.ts';
+import type { GatewayEventDef } from '../../../interfaces/mod.ts';
+import { User } from '../../../entities/mod.ts';
 
-export default {
+export const Ready: GatewayEventDef = {
   name: APIEvents.READY,
-  handle(client: CoreClient, payload: Payload) {
+  handle(client, payload) {
     const data = payload.d;
 
     client.gateway.sessionId = data.session_id;

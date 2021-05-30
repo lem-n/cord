@@ -1,16 +1,15 @@
-import type { ClientOptions } from '../src/structs/CoreClient.ts';
-import CoreClient from '../src/structs/CoreClient.ts';
-import logger from '../src/structs/Logger.ts';
+import type { CordOptions } from '../mod.ts';
+import { Cord, logger } from '../mod.ts';
 import type Command from './Command.ts';
 
-export default class Client extends CoreClient {
+export default class Client extends Cord {
   public commands: { [key: string]: Command };
 
   public aliases: { [key: string]: string };
 
   public commandHelp?: string;
 
-  constructor(options: ClientOptions) {
+  constructor(options: CordOptions) {
     super(options);
     this.commands = {};
     this.aliases = {};

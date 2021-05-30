@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type Member from './Member.ts';
+import type { Member } from './Member.ts';
 
-export default class Guild {
+export class Guild {
   public id: string;
 
   public name: string;

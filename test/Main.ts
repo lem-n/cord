@@ -1,17 +1,16 @@
+import type { Guild, Message } from '../mod.ts';
+import {
+  logger, UserStatus, Activity,
+} from '../mod.ts';
 import Client from './Client.ts';
 import config from './config.ts';
-import type Guild from '../src/entities/guild/Guild.ts';
-import type Message from '../src/entities/Message.ts';
-import UserStatus from '../src/entities/UserStatus.ts';
-import Activity from '../src/entities/Activity.ts';
-import Logger from '../src/structs/Logger.ts';
 
 const client = new Client({ token: config.token, logLevel: 'DEBUG' });
 
 await client.loadCommands();
 
 client.on('ready', () => {
-  Logger.info('Bot started!');
+  logger.info('Bot started!');
 
   setTimeout(() => {
     if (!client.me.presence?.game) {
@@ -30,7 +29,7 @@ client.on('ready', () => {
 });
 
 client.on('guildCreated', (guild: Guild) => {
-  Logger.info('Guild ->', guild.name);
+  logger.info('Guild ->', guild.name);
 });
 
 client.on('message', (message: Message) => {

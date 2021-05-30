@@ -1,4 +1,4 @@
-export default class Embed {
+export class Embed {
   public title?: string;
 
   public type?: string;

@@ -1,5 +1,5 @@
-import type CoreClient from '../src/structs/CoreClient.ts';
-import type Message from '../src/entities/Message.ts';
+import type { Message } from '../mod.ts';
+import type Client from './Client.ts';
 
 export interface CommandConfig {
   name: string;
@@ -29,5 +29,5 @@ export default class Command {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  run(client: CoreClient, message: Message, args: string[]) {}
+  run(client: Client, message: Message, args: string[]) {}
 }

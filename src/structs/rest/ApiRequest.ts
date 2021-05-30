@@ -1,5 +1,5 @@
-import type { HttpMethod } from '../../Constants.ts';
-import { API, Headers } from '../../Constants.ts';
+import type { HttpMethod } from '../../utils/mod.ts';
+import { API, Headers } from '../../utils/mod.ts';
 
 const { Base } = API;
 

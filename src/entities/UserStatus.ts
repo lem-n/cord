@@ -1,6 +1,6 @@
-import Activity from './Activity.ts';
+import { Activity } from './mod.ts';
 
-export default class UserStatus {
+export class UserStatus {
   public since: number | null;
 
   public game: Activity;

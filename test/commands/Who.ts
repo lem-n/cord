@@ -1,6 +1,4 @@
-import Message from '../../src/entities/Message.ts';
-import type User from '../../src/entities/User.ts';
-import logger from '../../src/structs/Logger.ts';
+import { Message } from '../../mod.ts';
 import type Client from '../Client.ts';
 import Command from '../Command.ts';
 
@@ -14,24 +12,25 @@ export default class Who extends Command {
   }
 
   run(client: Client, message: Message) {
-    const content = this.getContentWithoutName(message);
-    let retUser: User | undefined;
+    Message.send(client, message.channelId, 'WIP');
 
-    const searchTag = /^#[0-9]{4}$/.test(content.trim());
+    // const content = this.getContentWithoutName(message);
+    // let retUser: User | undefined;
 
-    console.dir(client.users);
+    // const searchTag = /^#[0-9]{4}$/.test(content.trim());
 
-    client.users.forEach((user) => {
-      logger.info('user tag:', user.discriminator);
-      if (searchTag && user.discriminator === content.trim()) {
-        retUser = user;
-      } else if (user.username.includes(content)) {
-        retUser = user;
-      }
-    });
+    // console.dir(client.users);
 
-    if (!retUser) return;
+    // client.users.forEach((user) => {
+    //   if (searchTag && user.discriminator === content.trim()) {
+    //     retUser = user;
+    //   } else if (user.username.includes(content)) {
+    //     retUser = user;
+    //   }
+    // });
 
-    Message.send(client, message.channelId, `${retUser.username}:#${retUser.discriminator}`);
+    // if (!retUser) return;
+
+    // Message.send(client, message.channelId, `${retUser.username}:#${retUser.discriminator}`);
   }
 }

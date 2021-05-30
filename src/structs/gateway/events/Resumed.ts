@@ -1,10 +1,9 @@
-import { APIEvents, Events } from '../../../Constants.ts';
-import type CoreClient from '../../CoreClient.ts';
-import type { Payload } from '../../../interfaces/Payload.ts';
+import { APIEvents, Events } from '../../../utils/mod.ts';
+import type { GatewayEventDef } from '../../../interfaces/mod.ts';
 
-export default {
+export const Resumed: GatewayEventDef = {
   name: APIEvents.RESUMED,
-  handle(client: CoreClient, payload: Payload) {
+  handle(client, payload) {
     client.emit(Events.RESUMED, payload.d);
   },
 };

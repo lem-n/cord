@@ -1,20 +1,20 @@
 import { EventEmitter } from 'https://deno.land/std/node/events.ts';
 import type { LevelName } from 'https://deno.land/std/log/levels.ts';
-import { Gateway } from './gateway/Gateway.ts';
-import { RequestHandler } from './rest/RequestHandler.ts';
+import { Gateway } from './gateway/mod.ts';
+import { RequestHandler } from './rest/mod.ts';
 
 import { setLogLevel } from './Logger.ts';
 
-import User from '../entities/User.ts';
-import type Guild from '../entities/guild/Guild.ts';
+import type { Guild } from '../entities/mod.ts';
+import { User } from '../entities/mod.ts';
 
-export interface ClientOptions {
+export interface CordOptions {
   token: string;
   logLevel?: LevelName;
 }
 
-export default class CoreClient extends EventEmitter {
-  public options: ClientOptions;
+export class Cord extends EventEmitter {
+  public options: CordOptions;
 
   public token: string;
 
@@ -31,7 +31,7 @@ export default class CoreClient extends EventEmitter {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public channels: Map<string, any>;
 
-  constructor(options: ClientOptions) {
+  constructor(options: CordOptions) {
     super();
 
     this.options = options;

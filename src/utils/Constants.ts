@@ -51,7 +51,7 @@ export const Headers = {
   'Content-Type': 'application/json',
 };
 
-export const Gateway = {
+export const GatewayInfo = {
   version: 9,
   encoding: 'json',
 };

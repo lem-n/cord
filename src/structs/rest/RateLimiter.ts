@@ -1,5 +1,5 @@
 import type { ApiRequest } from './ApiRequest.ts';
-import { Deferred } from '../../Utils.ts';
+import { Deferred } from '../../utils/mod.ts';
 import { eventLogger as logger } from '../Logger.ts';
 
 interface RateLimit {

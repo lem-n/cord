@@ -1,20 +1,19 @@
-import type CoreClient from '../CoreClient.ts';
-import type { EndpointOptions } from '../../Constants.ts';
-import { API } from '../../Constants.ts';
-import { ApiRequest } from './ApiRequest.ts';
-import { RateLimiter } from './RateLimiter.ts';
+import type { Cord } from '../mod.ts';
+import type { EndpointOptions } from '../../utils/mod.ts';
+import { API } from '../../utils/mod.ts';
+import { ApiRequest, RateLimiter } from './mod.ts';
 import { eventLogger as logger } from '../Logger.ts';
-import Message from '../../entities/Message.ts';
-import type Embed from '../../entities/Embed.ts';
+import { Message } from '../../entities/mod.ts';
+import type { Embed } from '../../entities/mod.ts';
 
 const { Endpoints } = API;
 
 export class RequestHandler {
-  private client: CoreClient;
+  private client: Cord;
 
   private limiter: RateLimiter;
 
-  constructor(client: CoreClient) {
+  constructor(client: Cord) {
     this.client = client;
     this.limiter = new RateLimiter();
   }

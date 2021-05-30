@@ -1,6 +1,6 @@
 import Command from '../Command.ts';
 import type Client from '../Client.ts';
-import Message from '../../src/entities/Message.ts';
+import { Message } from '../../mod.ts';
 
 export default class Echo extends Command {
   constructor() {

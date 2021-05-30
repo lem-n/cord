@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import User from './User.ts';
-import PartialMember from './guild/PartialMember.ts';
-import type CoreClient from '../structs/CoreClient.ts';
-import type Embed from './Embed.ts';
+import type { Cord } from '../structs/mod.ts';
+import type { Embed } from './mod.ts';
+import { User, PartialMember } from './mod.ts';
 
-export default class Message {
-  public client: CoreClient;
+export class Message {
+  public client: Cord;
 
   public id: string;
 
@@ -52,7 +51,7 @@ export default class Message {
 
   public flags: number;
 
-  constructor(client: CoreClient, data: any) {
+  constructor(client: Cord, data: any) {
     this.client = client;
     this.id = data.id;
     this.channelId = data.channel_id;
@@ -82,7 +81,7 @@ export default class Message {
   }
 
   static send(
-    client: CoreClient,
+    client: Cord,
     channelId: string,
     content: string,
     embed?: Embed,
@@ -91,7 +90,7 @@ export default class Message {
   }
 
   edit(
-    client: CoreClient,
+    client: Cord,
     message: Message,
     newContent: string,
     embed?: Embed,
@@ -104,7 +103,7 @@ export default class Message {
     );
   }
 
-  react(client: CoreClient, message: Message, emoji: string) {
+  react(client: Cord, message: Message, emoji: string) {
     return client.rest.reactToMessage(message.channelId, message.id, emoji);
   }
 }

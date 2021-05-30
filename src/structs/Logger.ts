@@ -80,7 +80,7 @@ await log.setup({
   },
 });
 
-const logger = log.getLogger();
+export const logger = log.getLogger();
 export const eventLogger = log.getLogger('events');
 
 export function setLogLevel(levelName: LevelName) {
@@ -88,5 +88,3 @@ export function setLogLevel(levelName: LevelName) {
   logger.level = level;
   eventLogger.level = level;
 }
-
-export default logger;

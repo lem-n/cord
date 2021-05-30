@@ -1,20 +1,20 @@
 import { Socket } from './WebSocket.ts';
 import {
   API,
-  Gateway as GatewayConstants,
+  GatewayInfo,
   GatewayIntents,
   HttpMethod,
   IdentityProps,
   WS,
-} from '../../Constants.ts';
-import type CoreClient from '../CoreClient.ts';
-import { EventHandler } from './events/EventHandler.ts';
-import type UserStatus from '../../entities/UserStatus.ts';
-import { ApiRequest } from '../rest/ApiRequest.ts';
+} from '../../utils/mod.ts';
+import type { Cord } from '../mod.ts';
+import { EventHandler } from './events/mod.ts';
+import type { UserStatus } from '../../entities/mod.ts';
+import { ApiRequest } from '../rest/mod.ts';
 import { eventLogger as logger } from '../Logger.ts';
 
 export class Gateway {
-  private client: CoreClient;
+  private client: Cord;
 
   private socket: Socket | undefined;
 
@@ -30,7 +30,7 @@ export class Gateway {
 
   public eventHandler: EventHandler;
 
-  constructor(client: CoreClient) {
+  constructor(client: Cord) {
     this.client = client;
 
     this.sessionId = '';
@@ -87,7 +87,7 @@ export class Gateway {
     }).execute();
 
     const json = await res.json();
-    const wsurl = `${json.url}/?v=${GatewayConstants.version}&encoding=${GatewayConstants.encoding}`;
+    const wsurl = `${json.url}/?v=${GatewayInfo.version}&encoding=${GatewayInfo.encoding}`;
     this.socket = new Socket(wsurl);
 
     this.initListeners();

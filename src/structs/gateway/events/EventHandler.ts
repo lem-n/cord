@@ -1,13 +1,10 @@
-import type CoreClient from '../../CoreClient.ts';
-import MessageCreated from './MessageCreated.ts';
-import MessageUpdated from './MessageUpdated.ts';
-import MessageDeleted from './MessageDeleted.ts';
-import Ready from './Ready.ts';
-import GuildCreated from './GuildCreated.ts';
-import Resumed from './Resumed.ts';
-import type { Payload } from '../../../interfaces/Payload.ts';
+import type { Cord } from '../../mod.ts';
+import type { Payload } from '../../../interfaces/mod.ts';
+import {
+  Ready, Resumed, MessageCreated, MessageUpdated, MessageDeleted, GuildCreated,
+} from './mod.ts';
 
-export type HandlerFunction = (client: CoreClient, payload: Payload) => void;
+export type HandlerFunction = (client: Cord, payload: Payload) => void;
 
 export interface Handler {
   name: string;
@@ -15,11 +12,11 @@ export interface Handler {
 }
 
 export class EventHandler {
-  private client: CoreClient;
+  private client: Cord;
 
   private handlers: { [index: string]: HandlerFunction };
 
-  constructor(client: CoreClient) {
+  constructor(client: Cord) {
     this.client = client;
     this.handlers = {
       [Ready.name]: Ready.handle,

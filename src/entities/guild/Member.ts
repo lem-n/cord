@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import User from '../User.ts';
+import { User } from '../User.ts';
 
-export default class Member {
+export class Member {
   public user: User;
 
   public nick: string;

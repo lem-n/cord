@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export default class User {
+export class User {
   public id: string;
 
   public username: string;

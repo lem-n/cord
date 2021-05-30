@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export default class Activity {
+export class Activity {
   public name: string;
 
   public type: number;

@@ -1,11 +1,10 @@
-import { APIEvents, Events } from '../../../Constants.ts';
-import type CoreClient from '../../CoreClient.ts';
-import type { Payload } from '../../../interfaces/Payload.ts';
-import Guild from '../../../entities/guild/Guild.ts';
+import { APIEvents, Events } from '../../../utils./mod.ts';
+import { Guild } from '../../../entities/mod.ts';
+import type { GatewayEventDef } from '../../../interfaces/mod.ts';
 
-export default {
+export const GuildCreated: GatewayEventDef = {
   name: APIEvents.GUILD.CREATE,
-  handle(client: CoreClient, payload: Payload) {
+  handle(client, payload) {
     const guild = new Guild(payload.d);
 
     guild.members.forEach((member) => !client.users.has(member.user.id)
