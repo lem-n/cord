@@ -1,6 +1,7 @@
-import CoreClient, { ClientOptions } from '../src/structs/CoreClient.ts';
+import type { ClientOptions } from '../src/structs/CoreClient.ts';
+import CoreClient from '../src/structs/CoreClient.ts';
 import logger from '../src/structs/Logger.ts';
-import Command from './Command.ts';
+import type Command from './Command.ts';
 
 export default class Client extends CoreClient {
   public commands: { [key: string]: Command };

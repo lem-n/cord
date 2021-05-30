@@ -1,4 +1,5 @@
-export function objectString(obj: Record<string, unknown>) {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export function objectString(obj: any) {
   const str = Deno.inspect(obj, { depth: 1 });
   return str;
 }

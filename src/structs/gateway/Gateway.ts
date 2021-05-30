@@ -45,7 +45,7 @@ export class Gateway {
       op: WS.OP.IDENTIFY,
       d: {
         token: this.client.token,
-        intents: GatewayIntents.Guilds + GatewayIntents.GuildMessages,
+        intents: GatewayIntents.Guilds + GatewayIntents.GuildMessages + GatewayIntents.GuildMembers,
         properties: IdentityProps,
       },
     };

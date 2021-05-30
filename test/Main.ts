@@ -1,7 +1,7 @@
 import Client from './Client.ts';
 import config from './config.ts';
-import Guild from '../src/entities/guild/Guild.ts';
-import Message from '../src/entities/Message.ts';
+import type Guild from '../src/entities/guild/Guild.ts';
+import type Message from '../src/entities/Message.ts';
 import UserStatus from '../src/entities/UserStatus.ts';
 import Activity from '../src/entities/Activity.ts';
 import Logger from '../src/structs/Logger.ts';

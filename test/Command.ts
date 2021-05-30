@@ -1,5 +1,5 @@
-import CoreClient from '../src/structs/CoreClient.ts';
-import Message from '../src/entities/Message.ts';
+import type CoreClient from '../src/structs/CoreClient.ts';
+import type Message from '../src/entities/Message.ts';
 
 export interface CommandConfig {
   name: string;
@@ -22,6 +22,10 @@ export default class Command {
     this.description = config.description;
     this.category = config.category;
     this.alias = config.alias;
+  }
+
+  getContentWithoutName(message: Message) {
+    return message.content.slice(this.name.length).trim();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
