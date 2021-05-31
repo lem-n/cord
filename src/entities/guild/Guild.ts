@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Member } from './Member.ts';
+import { Member } from './Member.ts';
 
 export class Guild {
   public id: string;
@@ -82,7 +82,7 @@ export class Guild {
 
   public voiceStates: any[];
 
-  public members: Member[];
+  public members: Map<string, Member>;
 
   public channels: any[];
 
@@ -136,7 +136,14 @@ export class Guild {
     this.approximatePresenceCount = data.approximate_presence_count;
 
     this.voiceStates = data.voice_states;
-    this.members = data.members;
+
+    this.members = new Map();
+    data.members?.forEach((member: any) => {
+      if (!member) return;
+      if (this.members.has(member.id)) return;
+      this.members.set(member.id, new Member(member));
+    });
+
     this.channels = data.channels;
     this.presences = data.presences;
     this.roles = data.roles;

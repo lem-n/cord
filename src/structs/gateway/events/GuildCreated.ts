@@ -7,11 +7,17 @@ export const GuildCreated: GatewayEventDef = {
   handle(client, payload) {
     const guild = new Guild(payload.d);
 
-    guild.members.forEach((member) => !client.users.has(member.user.id)
-      && client.users.set(member.user.id, member.user));
+    guild.members.forEach((member) => {
+      if (!client.users.has(member.user.id)) {
+        client.users.set(member.user.id, member.user);
+      }
+    });
 
-    guild.channels.forEach((channel) => !client.channels.has(channel.id)
-      && client.channels.set(channel.id, channel));
+    guild.channels.forEach((channel) => {
+      if (!client.channels.has(channel.id)) {
+        client.channels.set(channel.id, channel);
+      }
+    });
 
     if (!client.me.presence) {
       const presence = guild.presences.filter((pres) => pres.user.id === client.me.id)[0];

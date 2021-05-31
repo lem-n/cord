@@ -29,12 +29,20 @@ export class RequestHandler {
 
       logger.debug(`Executing request: ${endpoint.route}`, 'REST:REQUEST');
       const res = await this.limiter.enqueue(req);
+
+      let data = null;
+
       if (res.headers.get('content-type') === 'application/json') {
-        const json = await res.json();
-        return json;
+        data = await res.json();
+      } else {
+        data = await res.text();
       }
-      const text = await res.text();
-      return text;
+
+      if (!res.ok) {
+        return Promise.reject(data);
+      }
+
+      return data;
     } catch (err) {
       logger.error(
         'Something went wrong when processing the request',
@@ -51,7 +59,7 @@ export class RequestHandler {
     embed?: Embed,
   ): Promise<Message> {
     try {
-      const data = await this.request(Endpoints.Message.Create(channelId), {
+      const data = await this.request(Endpoints.Channel.Create(channelId), {
         content,
         embed,
         tts: false,
@@ -71,7 +79,7 @@ export class RequestHandler {
   ): Promise<Message> {
     try {
       const data = await this.request(
-        Endpoints.Message.Edit(channelId, messageId),
+        Endpoints.Channel.Edit(channelId, messageId),
         {
           content: newContent,
           embed,
@@ -91,7 +99,7 @@ export class RequestHandler {
   ): Promise<void> {
     try {
       await this.request(
-        Endpoints.Message.React(
+        Endpoints.Channel.React(
           channelId,
           messageId,
           encodeURIComponent(emoji),
@@ -104,6 +112,19 @@ export class RequestHandler {
         `with ${emoji}`,
       );
       return undefined;
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
+
+  async getMessage(channelId: string, messageId: string): Promise<Message | null> {
+    try {
+      const json = await this.request(Endpoints.Channel.GetMessage(channelId, messageId));
+      if (!json) {
+        return null;
+      }
+      console.dir(json);
+      return json;
     } catch (err) {
       return Promise.reject(err);
     }

@@ -25,7 +25,7 @@ export default class Command {
   }
 
   getContentWithoutName(message: Message) {
-    return message.content.slice(this.name.length).trim();
+    return message.content.slice(this.name.length + 1).trim();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

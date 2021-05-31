@@ -1,8 +1,8 @@
 import { Socket } from './WebSocket.ts';
 import {
   API,
+  calcIntents,
   GatewayInfo,
-  GatewayIntents,
   HttpMethod,
   IdentityProps,
   WS,
@@ -41,11 +41,12 @@ export class Gateway {
   }
 
   private get identifyPayload() {
+    const intents = calcIntents(this.client.options.intents);
     return {
       op: WS.OP.IDENTIFY,
       d: {
+        intents,
         token: this.client.token,
-        intents: GatewayIntents.Guilds + GatewayIntents.GuildMessages + GatewayIntents.GuildMembers,
         properties: IdentityProps,
       },
     };

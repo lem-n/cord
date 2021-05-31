@@ -80,6 +80,8 @@ await log.setup({
   },
 });
 
+// FIXME: error logging fails with objects
+
 export const logger = log.getLogger();
 export const eventLogger = log.getLogger('events');
 

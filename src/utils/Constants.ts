@@ -17,7 +17,7 @@ export const API = {
   Base: 'https://discord.com/api/v9',
   Endpoints: {
     GatewayBot: 'gateway/bot',
-    Message: {
+    Channel: {
       Create(channelId: string) {
         return {
           method: HttpMethod.POST,
@@ -38,6 +38,13 @@ export const API = {
           route: 'channel/messages/reactions',
           url:
             `channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me`,
+        };
+      },
+      GetMessage(channelId: string, messageId: string) {
+        return {
+          method: HttpMethod.POST,
+          route: 'channel/messages',
+          url: `channels/${channelId}/messages/${messageId}`,
         };
       },
     },

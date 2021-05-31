@@ -11,6 +11,7 @@ import { User } from '../entities/mod.ts';
 export interface CordOptions {
   token: string;
   logLevel?: LevelName;
+  intents: number[]
 }
 
 export class Cord extends EventEmitter {

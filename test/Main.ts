@@ -1,11 +1,17 @@
 import type { Guild, Message } from '../mod.ts';
 import {
+  GatewayIntents,
   logger, UserStatus, Activity,
 } from '../mod.ts';
+
 import Client from './Client.ts';
 import config from './config.ts';
 
-const client = new Client({ token: config.token, logLevel: 'DEBUG' });
+const client = new Client({
+  token: config.token,
+  logLevel: 'DEBUG',
+  intents: [GatewayIntents.Guilds, GatewayIntents.GuildMembers, GatewayIntents.GuildMessages],
+});
 
 await client.loadCommands();
 
