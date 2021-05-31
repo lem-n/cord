@@ -82,7 +82,7 @@ export class Gateway {
     }
   }
 
-  async connect() {
+  async connect(resume = false) {
     const res = await new ApiRequest(HttpMethod.GET, API.Endpoints.GatewayBot, {
       token: this.client.token,
     }).execute();
@@ -92,6 +92,8 @@ export class Gateway {
     this.socket = new Socket(wsurl);
 
     this.initListeners();
+
+    if (resume) this.resume();
   }
 
   close() {
@@ -180,7 +182,11 @@ export class Gateway {
         break;
       }
       default: {
-        logger.debug(payload, 'GATEWAY:DEFAULT_HANDLER');
+        if (!this.socket.isConnected) {
+          this.connect(true);
+        } else {
+          logger.debug(payload, 'GATEWAY:DEFAULT_HANDLER');
+        }
         break;
       }
     }

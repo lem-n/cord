@@ -1,3 +1,4 @@
+import { process } from 'https://deno.land/std@0.97.0/node/process.ts';
 import Command from '../Command.ts';
 import type Client from '../Client.ts';
 import { Message } from '../../mod.ts';
@@ -23,10 +24,10 @@ export default class Eval extends Command {
   async run(client: Client, message: Message) {
     try {
       const code = this.getContentWithoutName(message);
-      const startTime = Date.now();
+      const startTime = process.hrtime();
       // eslint-disable-next-line no-eval
       let result = eval(code);
-      const elapsed = Date.now() - startTime;
+      const elapsed = process.hrtime(startTime)[1] / 1000000;
 
       const type = typeof result;
       result = this.redactOutput(client, result);

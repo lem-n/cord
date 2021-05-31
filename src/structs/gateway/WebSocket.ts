@@ -9,16 +9,23 @@ function encode(data: any) {
 export class Socket extends EventEmitter {
   private socketUrl: string;
 
+  private connected: boolean;
+
   private socket: WebSocket | undefined;
 
   constructor(url: string) {
     super();
+    this.connected = false;
     this.socketUrl = url;
     this.connect();
   }
 
   public get url() {
     return this.socketUrl;
+  }
+
+  public get isConnected() {
+    return this.connected;
   }
 
   connect() {
@@ -50,6 +57,7 @@ export class Socket extends EventEmitter {
 
   private onOpen() {
     this.emit('open');
+    this.connected = true;
   }
 
   private onMessage(event: MessageEvent) {
